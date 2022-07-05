@@ -48,9 +48,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     String username = decodedJWT.getSubject();
                     String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                    stream(roles).forEach(role -> {
-                        authorities.add(new SimpleGrantedAuthority(role));
-                    });
+
+                    // 강의에서는 이렇게 다루지 않았음. 하지만 이렇게하지 않으면 refresh token으로 새로운 access token을 발급받을 수 없기에 이렇게 처리함.
+                    if (roles != null) {
+                        stream(roles).forEach(role -> {
+                            authorities.add(new SimpleGrantedAuthority(role));
+                        });
+                    }
+
                     UsernamePasswordAuthenticationToken authenticationToken =
                             new UsernamePasswordAuthenticationToken(username, null, authorities);
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);

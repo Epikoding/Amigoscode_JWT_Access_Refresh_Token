@@ -82,7 +82,7 @@ public class UserResource {
 
                 String accessToken = JWT.create()
                         .withSubject(user.getUsername())
-                        .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+                        .withExpiresAt(new Date(System.currentTimeMillis() +  60 * 1000))
                         .withIssuer(request.getRequestURL().toString())
                         .withClaim("roles", user.getRoles().stream().map(Role::getName).collect(Collectors.toList()))
                         .sign(algorithm);
